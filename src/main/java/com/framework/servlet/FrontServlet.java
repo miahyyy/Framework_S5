@@ -13,9 +13,9 @@ public class FrontServlet extends HttpServlet {
     public void service(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String path = request.getServletPath();
-        String realPath = getServletContext().getRealPath(path);
+        String path2 = getServletContext().getRealPath(path);
 
-        java.io.File file = new java.io.File(realPath);
+        java.io.File file = new java.io.File(path2);
 
         if (file.exists() && !file.isDirectory()) {
             // La ressource existe, on la forward
