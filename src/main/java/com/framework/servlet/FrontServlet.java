@@ -12,10 +12,21 @@ public class FrontServlet extends HttpServlet {
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/plain");
-        PrintWriter out = response.getWriter();
-        out.println("URL demandée: " + request.getRequestURL().toString());
-        System.out.println("URL demandée: " + request.getRequestURL().toString());
+        String path = request.getServletPath();
+        String realPath = getServletContext().getRealPath(path);
+
+        java.io.File file = new java.io.File(realPath);
+
+        if (file.exists() && !file.isDirectory()) {
+            // La ressource existe, on la forward
+            request.getRequestDispatcher(path).forward(request, response);
+        } else {
+            // La ressource n'existe pas, on affiche l'URL demandée
+            response.setContentType("text/plain");
+            PrintWriter out = response.getWriter();
+            out.println("URL demandée: " + request.getRequestURL().toString());
+            System.out.println("URL demandée: " + request.getRequestURL().toString());
+        }
     }
 
     @Override
